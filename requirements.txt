@@ -1,4 +1,5 @@
 flask==2.2.5
+gunicorn==21.2.0         # Required for Azure to serve Flask apps
 nest_asyncio==1.6.0
 plotly==5.15.0
 pdfplumber==0.10.2

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>EY Resume Parser</title>
+</head>
+<body class="bg-black text-white">
+  <div class="relative isolate overflow-hidden bg-gray-900">
+    <div class="absolute inset-0 -z-10 h-full w-full stroke-white/10">
+      <svg class="w-full h-full">
+        <defs>
+          <pattern id="grid" width="200" height="200" patternUnits="userSpaceOnUse">
+            <path d="M200 0H0V200" fill="none" stroke="white" stroke-opacity="0.05" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+    </div>
+
+    <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+      <div class="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
+        <img class="h-12" src="/static/ey_logo.png" alt="EY Logo">
+        <div class="mt-24 sm:mt-32 lg:mt-16">
+          <span class="rounded-full bg-yellow-400/10 px-3 py-1 text-sm font-semibold leading-6 text-yellow-300 ring-1 ring-inset ring-yellow-500/20">EY Resume Parser</span>
+        </div>
+        <h1 class="mt-10 text-4xl font-bold tracking-tight text-white sm:text-5xl">Transform Hiring with EY's Resume–JD Matching Tool</h1>
+        <p class="mt-6 text-lg leading-8 text-gray-300">Upload multiple resumes and a JD to instantly get skill and keyword match scores — styled for enterprise hiring needs.</p>
+
+        <form action="/process" method="post" enctype="multipart/form-data" class="mt-10 space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-200">Upload JD (PDF or Paste Text)</label>
+            <input type="file" name="jd_file" accept=".pdf,.txt" class="mt-2 w-full rounded-md bg-white/10 text-white border border-gray-300 px-3 py-2 text-sm file:bg-yellow-400 file:text-black">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-200">Upload Resumes (Max 10 - PDF/DOCX)</label>
+            <input type="file" name="resumes" accept=".pdf,.docx" multiple class="mt-2 w-full rounded-md bg-white/10 text-white border border-gray-300 px-3 py-2 text-sm file:bg-yellow-400 file:text-black">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-200">Mandatory Skills (comma-separated)</label>
+            <input type="text" name="mandatory_skills" placeholder="e.g., Python, Excel, HRMS" class="mt-2 w-full rounded-md bg-white/10 text-white border border-gray-300 px-3 py-2">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-200">Must-have Skills (comma-separated)</label>
+            <input type="text" name="must_have_skills" placeholder="e.g., Tableau, SQL" class="mt-2 w-full rounded-md bg-white/10 text-white border border-gray-300 px-3 py-2">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="mt-4 inline-flex items-center gap-x-2 rounded-full bg-yellow-400 px-6 py-2.5 text-sm font-semibold text-black shadow hover:bg-yellow-300">Analyze Now</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="mx-auto mt-20 max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-40 lg:max-w-none lg:flex-none xl:ml-32">
+        <div class="max-w-3xl flex-none">
+          <img src="https://res.cloudinary.com/dtsuvx8dz/image/upload/v1716357077/o1imiun4wwcpia9uucgs.gif" alt="EY Resume Parser UI" class="w-[20rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10">
+        </div>
+      </div>
+    </div>
+
+    {% if data %}
+    <div class="w-full py-10">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="bg-white/10 text-white p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-bold mb-4">Results</h2>
+          <div id="dictionaryValues"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function displayDictionaryValues(data) {
+        const container = document.getElementById("dictionaryValues");
+        let html = "";
+        Object.keys(data).forEach((key, index) => {
+          html += `<p><strong>${parseInt(index)+1}. ${key}:</strong> ${typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key]}</p>`;
+        });
+        container.innerHTML = html;
+      }
+      displayDictionaryValues({{ data | tojson }});
+    </script>
+    {% endif %}
+  </div>
+</body>
+</html>

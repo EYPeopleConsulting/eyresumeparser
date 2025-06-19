@@ -1,7 +1,4 @@
 import os
-import socket
-import threading
-import webbrowser
 from flask import Flask, request, render_template, send_from_directory
 from utils.extract import extract_jd_text, extract_resumes
 from utils.scorer import compute_scores
@@ -16,35 +13,25 @@ def index():
         if not jd_text:
             return render_template('index.html', error="Please upload or paste a JD.", results=[], excel_filename=None)
 
-        mandatory_skills = [s.strip() for s in request.form['mandatory_skills'].split(',') if s.strip()]
-        must_have_skills = [s.strip() for s in request.form['must_have_skills'].split(',') if s.strip()]
+        mandatory_skills = [s.strip() for s in request.form.get('mandatory_skills', '').split(',') if s.strip()]
+        must_have_skills = [s.strip() for s in request.form.get('must_have_skills', '').split(',') if s.strip()]
 
-        resumes = extract_resumes('resumes')[:10]  # Max 10 resumes
+        resumes = extract_resumes('resumes')[:10]  # Limit to 10 resumes
         if not resumes:
-            return render_template('index.html', error="No valid resumes found.", results=[], excel_filename=None)
+            return render_template('index.html', error="No valid resumes found in the 'resumes' folder.", results=[], excel_filename=None)
 
         results = compute_scores(jd_text, resumes, mandatory_skills, must_have_skills)
         excel_filename = export_to_excel(results)
 
         return render_template('results.html', results=results, excel_filename=excel_filename)
 
-    # For GET request
     return render_template('index.html', results=[], excel_filename=None)
 
 @app.route('/outputs/<filename>')
 def download_excel(filename):
     return send_from_directory('outputs', filename, as_attachment=True)
 
-def run_app():
-    sock = socket.socket()
-    sock.bind(('', 0))
-    _, port = sock.getsockname()
-    sock.close()
-
-    url = f'http://localhost:{port}'
-    threading.Thread(target=lambda: app.run(port=port, debug=False, use_reloader=False)).start()
-    print(f"\n🚀 Opening in browser: {url}")
-    webbrowser.open(url)
-
 if __name__ == '__main__':
-    run_app()
+    # Get port from environment for Azure compatibility; fallback to 5000 for local testing
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

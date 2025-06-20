@@ -1,34 +1,33 @@
-name: Azure Deploy - Resume Parser
+name: Deploy EY Resume Parser to Azure
 
 on:
   push:
     branches:
-      - main  # Or your active branch name
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ✅ Checkout source code
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: 📦 Set up Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    - name: 🧪 Install dependencies
+    - name: Install dependencies
       run: |
-        python -m venv antenv
-        source antenv/bin/activate
+        python -m venv venv
+        source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: 🚀 Deploy to Azure Web App
+    - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ey-resume-parser
-        slot-name: Production
+        app-name: EY-Resume-Parser
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
         package: .

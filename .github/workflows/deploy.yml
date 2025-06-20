@@ -25,12 +25,12 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: 🕐 Wait to avoid deploy conflict
+    - name: ⏱ Wait to avoid conflict
       run: sleep 20
 
-    - name: 🚀 Deploy to Azure Web App
+    - name: 🚀 Deploy to Azure
       uses: azure/webapps-deploy@v2
       with:
-        app-name: EY-Resume-Parser
+        app-name: ey-resume-parser
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
         package: .

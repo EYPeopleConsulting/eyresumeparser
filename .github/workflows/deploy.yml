@@ -28,7 +28,7 @@ jobs:
     - name: ⏱ Wait to avoid conflict
       run: sleep 20
 
-    - name: 🚀 Deploy to Azure
+    - name: 🚀 Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: ey-resume-parser

@@ -32,5 +32,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ey-resume-parser
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_TENANTID_9065CF853ED8466C8B784B04A7BEFE97 }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
         package: .

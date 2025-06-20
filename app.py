@@ -16,7 +16,7 @@ def index():
         mandatory_skills = [s.strip() for s in request.form.get('mandatory_skills', '').split(',') if s.strip()]
         must_have_skills = [s.strip() for s in request.form.get('must_have_skills', '').split(',') if s.strip()]
 
-        resumes = extract_resumes('resumes')[:10]  # Limit to 10 resumes
+        resumes = extract_resumes('resumes')[:10]
         if not resumes:
             return render_template('index.html', error="No valid resumes found in the 'resumes' folder.", results=[], excel_filename=None)
 
@@ -31,7 +31,10 @@ def index():
 def download_excel(filename):
     return send_from_directory('outputs', filename, as_attachment=True)
 
+@app.route('/health')
+def health():
+    return "OK", 200
+
 if __name__ == '__main__':
-    # Get port from environment for Azure compatibility; fallback to 5000 for local testing
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

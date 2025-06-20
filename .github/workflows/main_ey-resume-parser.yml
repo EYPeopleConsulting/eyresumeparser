@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - EY-Resume-Parser
+name: Build and deploy Python app to Azure Web App - ey-resume-parser
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.10'
 
       - name: Create and start virtual environment
         run: |
@@ -68,14 +68,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_44B9237135134A64892177F48408C791 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2EBE6D77D140400296E508A76A900E35 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CFBF2DFBB32441E98F5C7353EE9C39BE }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4A9DB74EAD844CA7999ED25C63B273E7 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9065CF853ED8466C8B784B04A7BEFE97 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BCCD440AFC504398ADDE2D3C9D668FAE }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'EY-Resume-Parser'
+          app-name: 'ey-resume-parser'
           slot-name: 'Production'
           
